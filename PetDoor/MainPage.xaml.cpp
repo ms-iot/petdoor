@@ -27,7 +27,8 @@ using namespace Windows::System::Threading;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-#define MOTION_SENSOR_PIN 18
+#define MOTION_SENSOR_PIN_OUTDOOR 18
+#define MOTION_SENSOR_PIN_INDOOR 23
 #define MOTION_SENSOR_TIMER_INTERVAL 1 // In seconds
 
 MainPage::MainPage()
@@ -42,14 +43,18 @@ void MainPage::Run()
 		[this](IAsyncAction^ workItem)
 	{
 
-		MotionSensor^ motionSensor = ref new MotionSensor(MOTION_SENSOR_PIN, MOTION_SENSOR_TIMER_INTERVAL);
+		MotionSensor^ motionSensorOutdoor = ref new MotionSensor(MOTION_SENSOR_PIN_OUTDOOR, MOTION_SENSOR_TIMER_INTERVAL);
+		MotionSensor^ motionSensorIndoor = ref new MotionSensor(MOTION_SENSOR_PIN_INDOOR, MOTION_SENSOR_TIMER_INTERVAL);
 
-		// Start timer to check for motion
-		motionSensor->Start();
+		// Start timers to check for motion
+		motionSensorOutdoor->Start();
+		motionSensorIndoor->Start();
 
-		// Add event handler
-		motionSensor->MotionDetected +=ref new PetDoor::MotionDetectedEventHandler(this,
-				&MainPage::OnMotionDetected);
+		// Add event handlers
+		motionSensorOutdoor->MotionDetected +=ref new PetDoor::MotionDetectedEventHandler(this,
+				&MainPage::OnOutdoorMotionDetected);
+		motionSensorIndoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
+			&MainPage::OnIndoorMotionDetected);
 
 		// TODO: Use code below when UI thread needs to be accessed (e.g. update a text box)
 		//CoreApplication::MainView->CoreWindow->Dispatcher->RunAsync(
@@ -63,10 +68,18 @@ void MainPage::Run()
 	auto asyncAction = ThreadPool::RunAsync(workItem);
 }
 
-
-// Called when motion is detected
-void MainPage::OnMotionDetected(Object^ sender, Platform::String^ s)
+// Called when motion is detected outdoors
+void MainPage::OnOutdoorMotionDetected(Object^ sender, Platform::String^ s)
 {
-	OutputDebugString(s->Data());
+	OutputDebugString(L"Outdoor motion detected\n");
 }
+
+
+// Called when motion is detected indoors
+void MainPage::OnIndoorMotionDetected(Object^ sender, Platform::String^ s)
+{
+	OutputDebugString(L"Indoor motion detected\n");
+}
+
+
 
