@@ -16,6 +16,8 @@ namespace PetDoor
 	{
 	public:
 		MainPage();
-
+	private:
+		void Run();
+		void OnMotionDetected(Object^ sender, Platform::String^ s);
 	};
 }
