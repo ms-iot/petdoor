@@ -20,5 +20,7 @@ namespace PetDoor
 		void Run();
 		void OnIndoorMotionDetected(Object^ sender, Platform::String^ s);
 		void OnOutdoorMotionDetected(Object^ sender, Platform::String^ s);
+		void InitMotionSensors();
+		void InitServos();
 	};
 }

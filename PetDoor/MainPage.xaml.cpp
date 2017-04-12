@@ -7,6 +7,7 @@
 #include "MainPage.xaml.h"
 #include <ppltasks.h>
 #include "MotionSensor.h"
+#include "Servo.h"
 
 using namespace PetDoor;
 
@@ -42,19 +43,9 @@ void MainPage::Run()
 	auto workItem = ref new WorkItemHandler(
 		[this](IAsyncAction^ workItem)
 	{
+		InitMotionSensors();
+		InitServos();
 
-		MotionSensor^ motionSensorOutdoor = ref new MotionSensor(MOTION_SENSOR_PIN_OUTDOOR, MOTION_SENSOR_TIMER_INTERVAL);
-		MotionSensor^ motionSensorIndoor = ref new MotionSensor(MOTION_SENSOR_PIN_INDOOR, MOTION_SENSOR_TIMER_INTERVAL);
-
-		// Start timers to check for motion
-		motionSensorOutdoor->Start();
-		motionSensorIndoor->Start();
-
-		// Add event handlers
-		motionSensorOutdoor->MotionDetected +=ref new PetDoor::MotionDetectedEventHandler(this,
-				&MainPage::OnOutdoorMotionDetected);
-		motionSensorIndoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
-			&MainPage::OnIndoorMotionDetected);
 
 		// TODO: Use code below when UI thread needs to be accessed (e.g. update a text box)
 		//CoreApplication::MainView->CoreWindow->Dispatcher->RunAsync(
@@ -66,6 +57,27 @@ void MainPage::Run()
 
 	// Running motion sensor code in new thread (not UI thread)
 	auto asyncAction = ThreadPool::RunAsync(workItem);
+}
+
+void MainPage::InitMotionSensors()
+{
+	MotionSensor^ motionSensorOutdoor = ref new MotionSensor(MOTION_SENSOR_PIN_OUTDOOR, MOTION_SENSOR_TIMER_INTERVAL);
+	MotionSensor^ motionSensorIndoor = ref new MotionSensor(MOTION_SENSOR_PIN_INDOOR, MOTION_SENSOR_TIMER_INTERVAL);
+
+	// Start timers to check for motion
+	motionSensorOutdoor->Start();
+	motionSensorIndoor->Start();
+
+	// Add event handlers
+	motionSensorOutdoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
+		&MainPage::OnOutdoorMotionDetected);
+	motionSensorIndoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
+		&MainPage::OnIndoorMotionDetected);
+}
+
+void MainPage::InitServos()
+{
+
 }
 
 // Called when motion is detected outdoors
