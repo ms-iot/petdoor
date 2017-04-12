@@ -19,10 +19,13 @@ namespace PetDoor
 		void Start();
 		void Stop();
 		event MotionDetectedEventHandler^ MotionDetected;
+
 	private:
-		ThreadPoolTimer ^timer;
-		int timerInterval;
-		GpioPinValue pinValue = Windows::Devices::Gpio::GpioPinValue::High;
-		GpioPin ^pin;
+		ThreadPoolTimer ^_timer;
+		int _timerInterval;
+		GpioPinValue _pinValue = Windows::Devices::Gpio::GpioPinValue::High;
+		GpioPin ^_pin;
+		void Pin_ValueChanged(GpioPin ^sender, GpioPinValueChangedEventArgs ^e);
+		void StartTimer();
 	};
 }
