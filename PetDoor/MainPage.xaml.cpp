@@ -30,6 +30,10 @@ using namespace Windows::System::Threading;
 
 #define MOTION_SENSOR_PIN_OUTDOOR 18
 #define MOTION_SENSOR_PIN_INDOOR 23
+
+#define LEFT_SERVO 24
+#define RIGHT_SERVO 25
+
 #define MOTION_SENSOR_TIMER_INTERVAL 1 // In seconds
 
 MainPage::MainPage()
@@ -44,7 +48,12 @@ void MainPage::Run()
 		[this](IAsyncAction^ workItem)
 	{
 		InitMotionSensors();
-		InitServos();
+		
+		// TODO: Servo usage
+		//Servo^ leftServo = ref new Servo(LEFT_SERVO);
+		//Servo^ rightServo = ref new Servo(RIGHT_SERVO);
+		//leftServo->Rotate(...);
+		//rightServo->Rotate(...);
 
 
 		// TODO: Use code below when UI thread needs to be accessed (e.g. update a text box)
@@ -73,11 +82,6 @@ void MainPage::InitMotionSensors()
 		&MainPage::OnOutdoorMotionDetected);
 	motionSensorIndoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
 		&MainPage::OnIndoorMotionDetected);
-}
-
-void MainPage::InitServos()
-{
-
 }
 
 // Called when motion is detected outdoors

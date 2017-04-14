@@ -11,13 +11,16 @@ using namespace Windows::UI::Xaml;
 using namespace Windows::System::Threading;
 using namespace Windows::Devices::Pwm;
 
+#define SERVO_FREQUENCY 50
+
 namespace PetDoor
 {
 	public ref class Servo sealed
 	{
 	public:
 		Servo(int pin);
-		void Rotate(int degrees);
+		~Servo();
+		void Rotate(double dutyCyclePercentage);
 	private:
 		PwmPin ^_pin;
 	};

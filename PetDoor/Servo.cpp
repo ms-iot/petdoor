@@ -31,13 +31,22 @@ namespace PetDoor
 
 		auto pwmControllers = create_task(PwmController::GetControllersAsync(LightningPwmProvider::GetPwmProvider())).get();
 		auto pwmController = pwmControllers->GetAt(1);
+		pwmController->SetDesiredFrequency(SERVO_FREQUENCY);
 		_pin = pwmController->OpenPin(pin);
 	}
 
-	void Servo::Rotate(int degrees)
+	void Servo::Rotate(double dutyCyclePercentage)
 	{
-		// TODO: Convert degrees to duty cycle
-		//_pin->SetActiveDutyCyclePercentage();
-		//_pin->Start();
+		// Test on Hi-Tec HS-475HB:
+		// 0 degrees: ~0.35
+		// 180 degrees: ~0.14
+
+		if (dutyCyclePercentage < 0 || dutyCyclePercentage > 0.15)
+		{
+			throw ref new Platform::Exception(S_FALSE, "Duty cycle percentage must be between 0 and 0.15");
+		}
+
+		_pin->SetActiveDutyCyclePercentage(dutyCyclePercentage);
+		_pin->Start();
 	}
 }
