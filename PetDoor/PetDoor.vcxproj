@@ -144,6 +144,7 @@
     <ClInclude Include="MainPage.xaml.h">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Servo.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -157,6 +158,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="packages.config" />
     <None Include="PetDoor_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -184,8 +186,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Servo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.IoT.Lightning.1.1.0\build\native\Microsoft.IoT.Lightning.targets" Condition="Exists('..\packages\Microsoft.IoT.Lightning.1.1.0\build\native\Microsoft.IoT.Lightning.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.IoT.Lightning.1.1.0\build\native\Microsoft.IoT.Lightning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.IoT.Lightning.1.1.0\build\native\Microsoft.IoT.Lightning.targets'))" />
+  </Target>
 </Project>
