@@ -6,6 +6,10 @@
 #pragma once
 
 #include "MainPage.g.h"
+#include "MotionSensor.h"
+#include "Servo.h"
+
+using namespace Windows::Devices::Gpio;
 
 namespace PetDoor
 {
@@ -17,10 +21,17 @@ namespace PetDoor
 	public:
 		MainPage();
 	private:
+		GpioPin^ ledPin;
+		MotionSensor^ motionSensorIndoor;
+		MotionSensor^ motionSensorOutdoor;
+		Servo^ leftServo;
+		Servo^ rightServo;
 		void Run();
 		void OnIndoorMotionDetected(Object^ sender, Platform::String^ s);
 		void OnOutdoorMotionDetected(Object^ sender, Platform::String^ s);
+		//void InitLED();
 		void InitMotionSensors();
 		void InitServos();
+		void OpenDoor(int milliseconds);
 	};
 }

@@ -19,6 +19,7 @@ namespace PetDoor
 		void Start();
 		void Stop();
 		event MotionDetectedEventHandler^ MotionDetected;
+		GpioPinValue GetPinValue();
 
 	private:
 		ThreadPoolTimer ^_timer;

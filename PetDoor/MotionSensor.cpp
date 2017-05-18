@@ -73,4 +73,8 @@ namespace PetDoor
 		}
 	}
 
+	GpioPinValue MotionSensor::GetPinValue()
+	{
+		return _pin->Read();
+	}
 }

@@ -19,7 +19,7 @@ namespace PetDoor
 		}
 		else
 		{
-			throw ref new Platform::Exception(S_FALSE, "Lightning is not enabled in this device.");
+			throw ref new Platform::Exception(E_FAIL, "Lightning is not enabled in this device.");
 		}
 
 		auto gpio = GpioController::GetDefault();
