@@ -103,7 +103,12 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories); %OCV2015_ROOT%\modules\core\include;%OCV2015_ROOT%\modules\imgproc\include;%OCV2015_ROOT%\modules\imgcodecs\include; %OCV2015_ROOT%\modules\objdetect\include;%OCV2015_ROOT%\modules\hal\include;%OCV2015_ROOT%\modules\highgui\include; %OCV2015_ROOT%\modules\ml\include;</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%OCV2015_ROOT%\vs2015\WS\10.0\ARM\lib\debug;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core300d.lib; opencv_imgproc300d.lib; opencv_imgcodecs300d.lib; opencv_objdetect300d.lib; opencv_ml300d.lib;WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
@@ -136,6 +141,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="MotionSensor.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.xaml.h">
@@ -158,6 +164,21 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_core300d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_imgcodecs300d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_imgproc300d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_ml300d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_objdetect300d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="packages.config" />
     <None Include="PetDoor_TemporaryKey.pfx" />
   </ItemGroup>
@@ -174,6 +195,7 @@
     <ClCompile Include="App.xaml.cpp">
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </ClCompile>
@@ -187,6 +209,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Servo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Assets\haarcascade_frontalcatface_extended.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
