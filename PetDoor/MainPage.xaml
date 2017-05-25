@@ -8,6 +8,37 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!--Camera preview-->
+            <CaptureElement Name="PreviewControl" Stretch="Uniform" Grid.Column="0"/>
+
+            <!--Captured preview frame image-->
+            <Image Name="PreviewFrameImage" Grid.Column="1"/>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <TextBlock Name="FrameInfoTextBlock" VerticalAlignment="Center"/>
+        </StackPanel>
+        <!--User input-->
+        <!--<StackPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <Button Name="GetPreviewFrameButton" Content="GetPreviewFrameAsync" Click="GetPreviewFrameButton_Click" Margin="10" IsEnabled="False"/>
+                <TextBlock Name="FrameInfoTextBlock" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Name="ShowFrameCheckBox" Content="Show frame" Margin="2"/>
+                <CheckBox Name="DrawRectanglesCheckBox" Content="Draw rectangles" Margin="2"/>
+            </StackPanel>
+            <CheckBox Name="SaveFrameCheckBox" Content="Save frame" Margin="2"/>
+        </StackPanel>-->
     </Grid>
 </Page>
