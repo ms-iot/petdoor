@@ -8,10 +8,12 @@
 #include <ppltasks.h>
 #include "MotionSensor.h"
 #include "Servo.h"
+#include "Camera.h"
 
 using namespace PetDoor;
 
 using namespace Platform;
+using namespace Concurrency;
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
 using namespace Microsoft::IoT::Lightning::Providers;
@@ -27,6 +29,8 @@ using namespace Windows::ApplicationModel::Core;
 using namespace Windows::UI::Core;
 using namespace Windows::System::Threading;
 using namespace Windows::Devices;
+using namespace Windows::Graphics::Display;
+using namespace Windows::Graphics::Imaging;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -143,6 +147,7 @@ void MainPage::OnIndoorMotionDetected(Object^ sender, Platform::String^ s)
 	OpenDoor();
 	OutputDebugString(L"Indoor motion detected\n");
 }
+
 
 
 

@@ -7,6 +7,17 @@
 //------------------------------------------------------------------------------
 
 
+namespace Windows {
+    namespace UI {
+        namespace Xaml {
+            namespace Controls {
+                ref class TextBlock;
+                ref class CaptureElement;
+                ref class Image;
+            }
+        }
+    }
+}
 
 namespace PetDoor
 {
@@ -23,6 +34,9 @@ namespace PetDoor
     private:
         bool _contentLoaded;
     
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ FrameInfoTextBlock;
+        private: ::Windows::UI::Xaml::Controls::CaptureElement^ PreviewControl;
+        private: ::Windows::UI::Xaml::Controls::Image^ PreviewFrameImage;
     };
 }
 
