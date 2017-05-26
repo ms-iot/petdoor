@@ -9,7 +9,6 @@
     <ClCompile Include="MotionSensor.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Servo.cpp" />
-    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MotionSensor.h" />
@@ -17,7 +16,6 @@
     <ClInclude Include="App.xaml.h" />
     <ClInclude Include="MainPage.xaml.h" />
     <ClInclude Include="Servo.h" />
-    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png" />
