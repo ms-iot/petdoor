@@ -92,7 +92,6 @@ namespace PetDoor
 		// Helpers
 		Concurrency::task<void> SaveSoftwareBitmapAsync(Windows::Graphics::Imaging::SoftwareBitmap^ bitmap);
 		Concurrency::task<Windows::Devices::Enumeration::DeviceInformation^> FindCameraDeviceByPanelAsync(Windows::Devices::Enumeration::Panel panel);
-		void WriteLine(Platform::String^ str);
 		void WriteException(Platform::Exception^ ex);
 		int ConvertDisplayOrientationToDegrees(Windows::Graphics::Display::DisplayOrientations orientation);
 

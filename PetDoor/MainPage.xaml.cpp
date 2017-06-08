@@ -176,7 +176,6 @@ void MainPage::OnIndoorMotionDetected(Object^ sender, Platform::String^ s)
 /// <returns></returns>
 task<void> MainPage::InitializeCameraAsync()
 {
-	WriteLine("InitializeCameraAsync");
 
 	// Attempt to get the back camera if one is available, but use any camera device if not
 	return FindCameraDeviceByPanelAsync(Windows::Devices::Enumeration::Panel::Back)
@@ -184,7 +183,6 @@ task<void> MainPage::InitializeCameraAsync()
 	{
 		if (camera == nullptr)
 		{
-			WriteLine("No camera device found!");
 			return;
 		}
 		// Figure out where the camera is located
@@ -227,7 +225,7 @@ task<void> MainPage::InitializeCameraAsync()
 			}
 			catch (AccessDeniedException^)
 			{
-				WriteLine("The app was denied access to the camera");
+				// Camera is denied access
 			}
 		});
 	}).then([this]()
@@ -251,7 +249,6 @@ task<void> MainPage::InitializeCameraAsync()
 /// <returns></returns>
 task<void> MainPage::CleanupCameraAsync()
 {
-	WriteLine("CleanupCameraAsync");
 
 	std::vector<task<void>> taskList;
 
@@ -288,7 +285,6 @@ task<void> MainPage::CleanupCameraAsync()
 /// <returns></returns>
 task<void> MainPage::StartPreviewAsync()
 {
-	WriteLine("StartPreviewAsync");
 
 	// Prevent the device from sleeping while the preview is running
 	_displayRequest->RequestActive();
@@ -632,17 +628,6 @@ task<DeviceInformation^> MainPage::FindCameraDeviceByPanelAsync(Windows::Devices
 }
 
 /// <summary>
-/// Writes a given string to the output window
-/// </summary>
-/// <param name="str">String to be written</param>
-void MainPage::WriteLine(Platform::String^ str)
-{
-	std::wstringstream wStringstream;
-	wStringstream << str->Data() << "\n";
-	OutputDebugString(wStringstream.str().c_str());
-}
-
-/// <summary>
 /// Writes a given exception message and hresult to the output window
 /// </summary>
 /// <param name="ex">Exception to be written</param>
@@ -747,9 +732,7 @@ void MainPage::DisplayInformation_OrientationChanged(DisplayInformation^ sender,
 
 void MainPage::MediaCapture_Failed(Capture::MediaCapture^, Capture::MediaCaptureFailedEventArgs^ errorEventArgs)
 {
-	std::wstringstream ss;
-	ss << "MediaCapture_Failed: 0x" << errorEventArgs->Code << ": " << errorEventArgs->Message->Data();
-	WriteLine(ref new Platform::String(ss.str().c_str()));
+	// MediaCapture Failed!
 
 	CleanupCameraAsync();
 }
