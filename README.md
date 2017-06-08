@@ -59,3 +59,5 @@ This app has an optional UI, which displays the camera stream along with the mos
 Helpful tip:
 
 The LEDs connected to each motion sensor will light up when their respective motion sensor is triggered and outputs 5V.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
