@@ -12,7 +12,7 @@ A text-messaging system that sends images of animals blocked from entering the h
 
 ## INITIAL SETUP
 
-1. Set up your PC and Raspberry Pi or MinnowBoard according to these instructions.
+1. Set up your PC and Raspberry Pi or MinnowBoard according to [these instructions](https://developer.microsoft.com/en-us/windows/iot/Docs/GetStarted/mbm/sdcard/stable/GetStartedStep1.htm).
 
 2. Plug in your USB webcam, keyboard, and mouse into your device.
 
@@ -44,7 +44,7 @@ git clone https://github.com/ms-iot/PetDoor.git
 
 3. Open the PetDoor.sln solution file, in the PetDoor folder you just downloaded, using Visual Studio 2017.
 
-4. Download OpenCV, build it, and add the built binaries to your project by following these instructions.
+4. Download OpenCV, build it, and add the built binaries to your project by following [these instructions](https://developer.microsoft.com/en-us/windows/iot/samples/opencv).
 
 4. On the top menu of Visual Studio, select Debug and ARM if you are using a Raspberry Pi, or Debug and x86 if you're using a MinnowBoard.
 
