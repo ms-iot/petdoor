@@ -169,21 +169,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_core300d.dll">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_imgproc300d.dll">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_ml300d.dll">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_objdetect300d.dll">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_videoio300d.dll">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
     <None Include="packages.config" />
     <None Include="PetDoor_TemporaryKey.pfx" />
   </ItemGroup>
