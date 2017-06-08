@@ -20,6 +20,8 @@ As an exercise, you can extend this project by implementing any of the following
 
 ![Alt text](WiringDiagram_bb.jpg)
 
+4. Turn on your device, and follow [these instructions](https://developer.microsoft.com/en-us/windows/iot/Docs/LightningSetup) to enable Lightning on your device.
+
 
 ## HARDWARE SETUP
 
