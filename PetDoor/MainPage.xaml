@@ -8,6 +8,25 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!--Camera preview-->
+            <CaptureElement Name="PreviewControl" Stretch="Uniform" Grid.Column="0"/>
+
+            <!--Captured preview frame image-->
+            <Image Name="PreviewFrameImage" Grid.Column="1"/>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <TextBlock Name="FrameInfoTextBlock" VerticalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Page>

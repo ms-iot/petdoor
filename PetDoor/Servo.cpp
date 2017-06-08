@@ -3,14 +3,14 @@
 
 using namespace Windows::Devices;
 using namespace Windows::Devices::Enumeration;
-using namespace Windows::Devices::Gpio;
+using namespace Windows::Devices::Pwm;
 using namespace Microsoft::IoT::Lightning::Providers;
 using namespace concurrency;
 
 namespace PetDoor
 {
 
-	// p: Pin connected to the servo
+	// pin: the channel on the PCA9685 connected to this servo
 	Servo::Servo(int pin)
 	{
 		if (LightningProvider::IsLightningEnabled)
@@ -19,7 +19,7 @@ namespace PetDoor
 		}
 		else
 		{
-			throw ref new Platform::Exception(S_FALSE, "Lightning is not enabled in this device.");
+			throw ref new Platform::Exception(E_FAIL, "Lightning is not enabled in this device.");
 		}
 
 		auto gpio = GpioController::GetDefault();
@@ -29,12 +29,14 @@ namespace PetDoor
 			throw ref new Platform::Exception(S_FALSE, "There is no GPIO controller on this device.");
 		}
 
-		auto pwmControllers = create_task(PwmController::GetControllersAsync(LightningPwmProvider::GetPwmProvider())).get();
-		auto pwmController = pwmControllers->GetAt(1);
+		// Default should return the hardware controller
+		auto pwmController = create_task(PwmController::GetDefaultAsync()).get();
 		pwmController->SetDesiredFrequency(SERVO_FREQUENCY);
 		_pin = pwmController->OpenPin(pin);
+
 	}
 
+	//Rotates the servo
 	void Servo::Rotate(double dutyCyclePercentage)
 	{
 		// Test on Hi-Tec HS-475HB:
@@ -48,5 +50,11 @@ namespace PetDoor
 
 		_pin->SetActiveDutyCyclePercentage(dutyCyclePercentage);
 		_pin->Start();
+	}
+
+	// stops PWM on the Servo
+	void Servo::Stop() 
+	{
+		_pin->Stop();
 	}
 }

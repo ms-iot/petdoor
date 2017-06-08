@@ -20,6 +20,7 @@ namespace PetDoor
 	public:
 		Servo(int pin);
 		void Rotate(double dutyCyclePercentage);
+		void Stop();
 	private:
 		PwmPin ^_pin;
 	};
