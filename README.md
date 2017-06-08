@@ -5,10 +5,10 @@ This project employs computer vision to ensure that your cat will have exclusive
 
 As an exercise, you can extend this project by implementing any of the following features:
 
-A user interface to view photos of animals that tried to re-enter the house.
-A dashboard that displays information on the frequency of your cat’s comings and goings.
-An option to re-train the classifier using images of your cat.
-A text-messaging system that sends images of animals blocked from entering the house, with the option for a reply to manually override the classifier’s decision.
+- A user interface to view photos of animals that tried to re-enter the house.
+- A dashboard that displays information on the frequency of your cat’s comings and goings.
+- An option to re-train the classifier using images of your cat.
+- A text-messaging system that sends images of animals blocked from entering the house, with the option for a reply to manually override the classifier’s decision.
 
 ## INITIAL SETUP
 
