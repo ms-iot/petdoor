@@ -27,6 +27,7 @@
     <uap:Capability Name="picturesLibrary" />
     <iot:Capability Name="lowLevelDevices" />
     <DeviceCapability Name="webcam" />
+    <DeviceCapability Name="microphone" />
     <DeviceCapability Name="109b86ad-f53d-4b76-aa5f-821e2ddf2141" />
   </Capabilities>
 </Package>

@@ -15,9 +15,7 @@ namespace PetDoor
 	public ref class MotionSensor sealed
 	{
 	public:
-		MotionSensor(int pin, int interval);
-		void Start();
-		void Stop();
+		MotionSensor(int pin);
 		event MotionDetectedEventHandler^ MotionDetected;
 		GpioPinValue GetPinValue();
 
@@ -27,6 +25,5 @@ namespace PetDoor
 		GpioPinValue _pinValue = Windows::Devices::Gpio::GpioPinValue::High;
 		GpioPin ^_pin;
 		void Pin_ValueChanged(GpioPin ^sender, GpioPinValueChangedEventArgs ^e);
-		void StartTimer();
 	};
 }

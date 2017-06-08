@@ -73,12 +73,11 @@ namespace PetDoor
 		Windows::Foundation::EventRegistrationToken _mediaCaptureFailedEventToken;
 		Windows::Foundation::EventRegistrationToken _displayInformationEventToken;
 
-		void Run();
 		void OnIndoorMotionDetected(Object^ sender, Platform::String^ s);
 		void OnOutdoorMotionDetected(Object^ sender, Platform::String^ s);
 		//void InitLED();
 		void InitMotionSensors();
-		void InitServos();
+		Concurrency::task<void> InitServos();
 		void OpenDoor(int milliseconds);
 
 		// MediaCapture methods
@@ -88,6 +87,7 @@ namespace PetDoor
 		Concurrency::task<void> SetPreviewRotationAsync();
 		Concurrency::task<void> StopPreviewAsync();
 		Concurrency::task<int> GetPreviewFrameAsSoftwareBitmapAsync();
+		Concurrency::task<void> UpdateAndSaveImage(Windows::Graphics::Imaging::SoftwareBitmap ^previewFrame);
 
 		// Helpers
 		Concurrency::task<void> SaveSoftwareBitmapAsync(Windows::Graphics::Imaging::SoftwareBitmap^ bitmap);

@@ -57,10 +57,10 @@ using namespace Windows::UI::Xaml::Navigation;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 
-#define LEFT_SERVO 7 //White
-#define RIGHT_SERVO 1 //Gray
-#define MOTION_SENSOR_PIN_OUTDOOR 6 // Orange
-#define MOTION_SENSOR_PIN_INDOOR 8 //Yellow
+#define LEFT_SERVO 2 // 2nd channel on PC9685
+#define RIGHT_SERVO 3 // 3rd channel on PCA9685
+#define MOTION_SENSOR_PIN_OUTDOOR 26
+#define MOTION_SENSOR_PIN_INDOOR 19
 #define MOTION_SENSOR_TIMER_INTERVAL 1 // In seconds
 
 
@@ -76,6 +76,7 @@ MainPage::MainPage()
 	, _captureFolder(nullptr)
 {
 	InitializeComponent();
+	// load in the cat classifier
 	const cv::String cat_cascade_name = "Assets/haarcascade_frontalcatface_extended.xml";
 	_displayInformation = DisplayInformation::GetForCurrentView();
 	_systemMediaControls = SystemMediaTransportControls::GetForCurrentView();
@@ -94,7 +95,12 @@ MainPage::MainPage()
 		Application::Current->Suspending += ref new SuspendingEventHandler(this, &MainPage::Application_Suspending);
 	_applicationResumingEventToken =
 		Application::Current->Resuming += ref new EventHandler<Object^>(this, &MainPage::Application_Resuming);
-	Run();
+
+
+	InitServos().then([this] {
+		InitMotionSensors();
+	});
+	
 }
 
 MainPage::~MainPage() {
@@ -103,84 +109,25 @@ MainPage::~MainPage() {
 	_systemMediaControls->PropertyChanged -= _mediaControlPropChangedEventToken;
 }
 
-void MainPage::Run()
-{
-	auto workItem = ref new WorkItemHandler(
-		[this](IAsyncAction^ workItem)
-	{
-		if (LightningProvider::IsLightningEnabled)
-		{
-			LowLevelDevicesController::DefaultProvider = LightningProvider::GetAggregateProvider();
-		}
-		else
-		{
-			throw ref new Platform::Exception(E_FAIL, "Lightning is not enabled in this device.");
-		}
-
-		auto gpio = GpioController::GetDefault();
-
-		if (gpio == nullptr)
-		{
-			throw ref new Platform::Exception(S_FALSE, "There is no GPIO controller on this device.");
-		}
-
-		//InitLED();
-		InitServos();
-		InitMotionSensors();
-
-		// Note: Servo usage
-		//Servo^ leftServo = ref new Servo(LEFT_SERVO);
-		//Servo^ rightServo = ref new Servo(RIGHT_SERVO);
-		//leftServo->Rotate(...);
-		//rightServo->Rotate(...);
-
-		// Note: Use code below when UI thread needs to be accessed (e.g. update a text box)
-		//CoreApplication::MainView->CoreWindow->Dispatcher->RunAsync(
-		//	CoreDispatcherPriority::High,
-		//	ref new DispatchedHandler([this]()
-		//{
-		//}));
-	});
-
-	// Running motion sensor code in new thread (not UI thread)
-	auto asyncAction = ThreadPool::RunAsync(workItem);
-}
-
 void MainPage::InitMotionSensors()
 {
-	//motionSensorOutdoor = ref new MotionSensor(MOTION_SENSOR_PIN_OUTDOOR, MOTION_SENSOR_TIMER_INTERVAL);
-	motionSensorIndoor = ref new MotionSensor(MOTION_SENSOR_PIN_INDOOR, MOTION_SENSOR_TIMER_INTERVAL);
-
-	// Start timers to check for motion
-	//motionSensorOutdoor->Start();
-	motionSensorIndoor->Start();
+	motionSensorOutdoor = ref new MotionSensor(MOTION_SENSOR_PIN_OUTDOOR);
+	motionSensorIndoor = ref new MotionSensor(MOTION_SENSOR_PIN_INDOOR);
 
 	// Add event handlers
-	//motionSensorOutdoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
-	//&MainPage::OnOutdoorMotionDetected);
+	motionSensorOutdoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
+		&MainPage::OnOutdoorMotionDetected);
 	motionSensorIndoor->MotionDetected += ref new PetDoor::MotionDetectedEventHandler(this,
 		&MainPage::OnIndoorMotionDetected);
 }
 
-void MainPage::InitServos()
+task<void> MainPage::InitServos()
 {
-	rightServo = ref new Servo(RIGHT_SERVO);
-	leftServo = ref new Servo(LEFT_SERVO);
+	return create_task([this] {
+		rightServo = ref new Servo(RIGHT_SERVO);
+		leftServo = ref new Servo(LEFT_SERVO);
+	});
 }
-
-////void MainPage::InitLED()
-////{
-////	auto gpio = GpioController::GetDefault();
-////
-////	if (gpio == nullptr)
-////	{
-////		throw ref new Platform::Exception(E_FAIL, "There is no GPIO controller on this device.");
-////	}
-////
-////	ledPin = gpio->OpenPin(LED);
-////	ledPin->Write(GpioPinValue::High);
-////	ledPin->SetDriveMode(GpioPinDriveMode::Output);
-////}
 
 // Called when motion is detected outdoors
 void MainPage::OnOutdoorMotionDetected(Object^ sender, Platform::String^ s)
@@ -188,30 +135,38 @@ void MainPage::OnOutdoorMotionDetected(Object^ sender, Platform::String^ s)
 	OutputDebugString(L"Outdoor motion detected\n");
 	// If preview is not running, no preview frames can be acquired
 	if (!_isPreviewing) return;
-
 	auto getFrameTask = GetPreviewFrameAsSoftwareBitmapAsync();
 	// open the door if your cats are there (according to the model)
 	getFrameTask.then([this](int cat_count) {
 		if (cat_count > 0) {
+			std::wstringstream catNo;
+			catNo << "Cats found: " << cat_count << "\n";
+			OutputDebugString(catNo.str().c_str());
 			OpenDoor(3000);
 		}
 	});
 
 }
 
-void MainPage::OpenDoor(int milliseconds = 1000)
+// Turns the servo so the pet door can be opened
+// by default, the door stays open for 5 seconds; pass in a different parameter if you'd like to change that
+void MainPage::OpenDoor(int stayOpenMS = 5000)
 {
-	rightServo->Rotate(0.1225); // Open
-	leftServo->Rotate(0.0288); // Open
-	Sleep(milliseconds);
-	leftServo->Rotate(0.0755); // Closed
-	rightServo->Rotate(0.0785); //Closed
+	rightServo->Rotate(0.1300);
+	leftServo->Rotate(0.0188);
+	Sleep(700);
+	Sleep(stayOpenMS);
+	leftServo->Rotate(0.0765);
+	rightServo->Rotate(0.0785);
+	Sleep(700);
+	leftServo->Stop();
+	rightServo->Stop();
 }
 
-// Called when motion is detected indoors
+// Open the door when the cat wants to go out
 void MainPage::OnIndoorMotionDetected(Object^ sender, Platform::String^ s)
 {
-	OpenDoor();
+	OpenDoor(3000);
 	OutputDebugString(L"Indoor motion detected\n");
 }
 
@@ -256,9 +211,8 @@ task<void> MainPage::InitializeCameraAsync()
 		auto settings = ref new Capture::MediaCaptureInitializationSettings();
 		settings->VideoDeviceId = camera->Id;
 
-		// Initialize media capture and start the preview
-		create_task(_mediaCapture->InitializeAsync(settings))
-			.then([this]()
+		// Initialize media capture and start the preview	
+		create_task(_mediaCapture->InitializeAsync(settings)).then([this]()
 		{
 			_isInitialized = true;
 
@@ -320,6 +274,10 @@ task<void> MainPage::CleanupCameraAsync()
 		{
 			_mediaCapture->Failed -= _mediaCaptureFailedEventToken;
 			_mediaCapture = nullptr;
+			motionSensorOutdoor = nullptr;
+			motionSensorIndoor = nullptr;
+			leftServo = nullptr;
+			rightServo = nullptr;
 		}
 	});
 }
@@ -552,7 +510,14 @@ task<int> MainPage::GetPreviewFrameAsSoftwareBitmapAsync()
 		// Show the frame information
 		std::wstringstream ss;
 		ss << previewFrame->PixelWidth << "x" << previewFrame->PixelHeight << " " << previewFrame->BitmapPixelFormat.ToString()->Data();
-		FrameInfoTextBlock->Text = ref new Platform::String(ss.str().c_str());
+		auto str = ss.str().c_str();
+		// Update UI
+		CoreApplication::MainView->CoreWindow->Dispatcher->RunAsync(
+			CoreDispatcherPriority::High,
+			ref new DispatchedHandler([this, str]()
+			{
+				FrameInfoTextBlock->Text = ref new Platform::String(str);
+			}));
 
 		// Use openCV to draw rectangles over detected objects
 
@@ -561,27 +526,37 @@ task<int> MainPage::GetPreviewFrameAsSoftwareBitmapAsync()
 		previewFrame = SoftwareBitmap::Convert(MatToSoftwareBitmap(previewMat), BitmapPixelFormat::Bgra8);
 		framepPix = previewFrame->BitmapPixelFormat;
 
-		std::vector<task<void>> taskList;
+		CoreApplication::MainView->CoreWindow->Dispatcher->RunAsync(
+			CoreDispatcherPriority::High,
+			ref new DispatchedHandler([this, previewFrame, currentFrame, objectVector]()
+			{
+				//taskList.push_back(UpdateAndSaveImage(previewFrame));
+				UpdateAndSaveImage(previewFrame).then([currentFrame]() {
+					// IClosable.Close projects into CX as operator delete.
+					delete currentFrame;
+				});
+			}));
 
-		// Copy it to a WriteableBitmap to display it to the user
-		auto sbSource = ref new Media::Imaging::SoftwareBitmapSource();
-
-		taskList.push_back(create_task(sbSource->SetBitmapAsync(previewFrame))
-			.then([this, sbSource]()
-		{
-			// Display it in the Image control
-			PreviewFrameImage->Source = sbSource;
-		}));
-
-		taskList.push_back(SaveSoftwareBitmapAsync(previewFrame));
+		// return the number of cats found
+		return static_cast<int>(objectVector.size());
 
 
-		return when_all(taskList.begin(), taskList.end()).then([currentFrame]() {
-			// IClosable.Close projects into CX as operator delete.
-			delete currentFrame;
-		}).then([objectVector]() {
-			return static_cast<int>(objectVector.size());
-		});
+
+	});
+}
+
+task<void> MainPage::UpdateAndSaveImage(SoftwareBitmap ^previewFrame)
+{
+	auto sbSource = ref new Media::Imaging::SoftwareBitmapSource();
+	return create_task(sbSource->SetBitmapAsync(previewFrame))
+		.then([this, sbSource]()
+	{
+		// Display it in the Image control
+		PreviewFrameImage->Source = sbSource;
+
+	}).then([this, previewFrame]() 
+	{
+		SaveSoftwareBitmapAsync(previewFrame);
 	});
 }
 
@@ -785,7 +760,6 @@ void MainPage::OnNavigatedTo(Windows::UI::Xaml::Navigation::NavigationEventArgs^
 	_displayOrientation = _displayInformation->CurrentOrientation;
 	_displayInformationEventToken =
 		_displayInformation->OrientationChanged += ref new TypedEventHandler<DisplayInformation^, Object^>(this, &MainPage::DisplayInformation_OrientationChanged);
-
 	InitializeCameraAsync();
 }
 

@@ -103,7 +103,7 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories); %OCV2015_ROOT%\modules\core\include;%OCV2015_ROOT%\modules\imgproc\include;%OCV2015_ROOT%\modules\imgcodecs\include; %OCV2015_ROOT%\modules\objdetect\include;%OCV2015_ROOT%\modules\hal\include;%OCV2015_ROOT%\modules\highgui\include; %OCV2015_ROOT%\modules\ml\include;%OCV2015_ROOT%\modules\videoio\include; </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%OCV2015_ROOT%\modules\core\include;%OCV2015_ROOT%\modules\imgproc\include;%OCV2015_ROOT%\modules\imgcodecs\include; %OCV2015_ROOT%\modules\objdetect\include;%OCV2015_ROOT%\modules\hal\include;%OCV2015_ROOT%\modules\highgui\include; %OCV2015_ROOT%\modules\ml\include;%OCV2015_ROOT%\modules\videoio\include;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories); %OCV2015_ROOT%\modules\core\include;%OCV2015_ROOT%\modules\imgproc\include;%OCV2015_ROOT%\modules\imgcodecs\include; %OCV2015_ROOT%\modules\objdetect\include;%OCV2015_ROOT%\modules\hal\include;%OCV2015_ROOT%\modules\highgui\include; %OCV2015_ROOT%\modules\ml\include;%OCV2015_ROOT%\modules\videoio\include; </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%OCV2015_ROOT%\vs2015\WS\10.0\ARM\lib\debug;</AdditionalLibraryDirectories>
@@ -120,7 +120,12 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>%OCV2015_ROOT%\modules\core\include;%OCV2015_ROOT%\modules\imgproc\include;%OCV2015_ROOT%\modules\imgcodecs\include; %OCV2015_ROOT%\modules\objdetect\include;%OCV2015_ROOT%\modules\hal\include;%OCV2015_ROOT%\modules\highgui\include; %OCV2015_ROOT%\modules\ml\include;%OCV2015_ROOT%\modules\videoio\include;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%OCV2015_ROOT%\vs2015\WS\10.0\x86\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core300d.lib;opencv_imgproc300d.lib;opencv_imgcodecs300d.lib;opencv_objdetect300d.lib;opencv_ml300d.lib;opencv_videoio300d.lib;WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -150,6 +155,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Servo.h" />
+    <ClInclude Include="TimeSpanHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -164,9 +170,6 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_core300d.dll">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_imgcodecs300d.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="..\..\..\opencv\vs2015\WS\10.0\ARM\bin\Debug\opencv_imgproc300d.dll">

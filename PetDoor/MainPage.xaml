@@ -28,17 +28,5 @@
         <StackPanel Grid.Row="1">
             <TextBlock Name="FrameInfoTextBlock" VerticalAlignment="Center"/>
         </StackPanel>
-        <!--User input-->
-        <!--<StackPanel Grid.Row="1">
-            <StackPanel Orientation="Horizontal">
-                <Button Name="GetPreviewFrameButton" Content="GetPreviewFrameAsync" Click="GetPreviewFrameButton_Click" Margin="10" IsEnabled="False"/>
-                <TextBlock Name="FrameInfoTextBlock" VerticalAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox Name="ShowFrameCheckBox" Content="Show frame" Margin="2"/>
-                <CheckBox Name="DrawRectanglesCheckBox" Content="Draw rectangles" Margin="2"/>
-            </StackPanel>
-            <CheckBox Name="SaveFrameCheckBox" Content="Save frame" Margin="2"/>
-        </StackPanel>-->
     </Grid>
 </Page>
